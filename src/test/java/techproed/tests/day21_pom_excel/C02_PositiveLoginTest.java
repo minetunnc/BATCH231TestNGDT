@@ -1,6 +1,12 @@
 package techproed.tests.day21_pom_excel;
 
+import org.openqa.selenium.Keys;
+import org.testng.Assert;
 import org.testng.annotations.Test;
+import techproed.pages.BlueRentalPage;
+import techproed.utilities.ConfigReader;
+import techproed.utilities.Driver;
+import techproed.utilities.ReusableMethods;
 
 public class C02_PositiveLoginTest {
 //Name: US100201_Admin_Login
@@ -23,6 +29,17 @@ public class C02_PositiveLoginTest {
         //email : ada@ada.com
         //password: 12345
         //https://www.bluerentalcars.com/
+
+        Driver.getDriver().get(ConfigReader.getProperty("blueRentalUrl"));
+        BlueRentalPage blueRentalPage= new BlueRentalPage();
+        blueRentalPage.loginButton.click();
+        blueRentalPage.email.sendKeys(ConfigReader.getProperty("blueRentalEmail"));
+        blueRentalPage.password.sendKeys(ConfigReader.getProperty("blueRentalPassword"),Keys.ENTER);
+
+        ReusableMethods.waitForSecond(2);
+        Assert.assertTrue(blueRentalPage.loginVerify.getText().contains("ada admin"));
+
+        Driver.closeDriver();
 
 
     }

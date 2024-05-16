@@ -1,6 +1,7 @@
 package techproed.tests.day21_pom_excel;
 
 import org.openqa.selenium.Keys;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 import techproed.pages.BlueRentalPage;
 import techproed.utilities.ConfigReader;
@@ -30,8 +31,16 @@ public class C05_BlueRentalCarExcelTest {
         blueRentalPage.password.sendKeys(password, Keys.ENTER);
 
         ReusableMethods.waitForSecond(2);
+
         //Girilen email ile giriş yapıldığını doğrulayın
+        blueRentalPage.loginVerify.click();
+        ReusableMethods.waitForSecond(2);
+        blueRentalPage.profile.click();
+        String profilEmail=blueRentalPage.profileEmail.getText();
+        Assert.assertEquals(profilEmail,email);
+
         //sayfayı kapatalım
+        Driver.closeDriver();
 
 
     }

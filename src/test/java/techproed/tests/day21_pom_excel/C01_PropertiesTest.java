@@ -25,7 +25,7 @@ public class C01_PropertiesTest {
     public void test01() throws InterruptedException, FileNotFoundException {
 
         //https://opensource-demo.orangehrmlive.com/web/index.php/auth/login adresine gidelim
-        Driver.getDriver().get(ConfigReader.getProperty("openSourceUrl"));
+        Driver.getDriver().get("openSourceUrl");
 
         //kullaniciAdi, kullaniciSifre, submitButton elementlerini locate edelim login olalım
         OpenSourcePage openSourcePage = new OpenSourcePage();
@@ -34,9 +34,8 @@ public class C01_PropertiesTest {
         openSourcePage.loginButton.submit();
 
         //Login Testinin basarili oldugunu test edelim
-        WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(15));
+        WebDriverWait wait=new WebDriverWait(Driver.getDriver(),Duration.ofSeconds(15));
         wait.until(ExpectedConditions.visibilityOf(openSourcePage.dashboard));
-
         Assert.assertTrue(openSourcePage.dashboard.isDisplayed());
 
         //sayfayi kapatalim
