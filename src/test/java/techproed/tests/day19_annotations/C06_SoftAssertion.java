@@ -5,7 +5,7 @@ import org.testng.asserts.SoftAssert;
 
 public class C06_SoftAssertion {
 
-    @Test
+    @Test(groups = "smoke")
     public void test01() {
 
         SoftAssert softAssert = new SoftAssert();

@@ -5,52 +5,54 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.safari.SafariDriver;
-
 import java.time.Duration;
 
 public class Driver {
+    // ThreadLocal ile her thread için ayrı bir WebDriver objesi oluşturuyoruz.
+    /*
+    Webdriver tipinde bir ThreadLocal objecti olusturduk, bu sayede PARALEL TEST yaparken her threadin
+    kendi webdriver objectine sahip olmasini sagladik, Böylece paralel olarak calisan farkli threadlerin
+    birbirini etkilemesini önledik
+     */
+    private static ThreadLocal<WebDriver> driverPool = new ThreadLocal<>();
 
-    private Driver() {
-/*
-Singleton pattern (tekli kullanim) icin constructoru private yaptik, bu sayede bu classtan
-driver objecti kullanimini sadece getDriver methodu üzerinden tekil yaptik
- */
-    }
-
-    static WebDriver driver;
-
-    public static WebDriver getDriver(){
-        if(driver==null){
-            switch ( ConfigReader.getProperty("browser")){
-                case "chrome" :
-                    driver = new ChromeDriver();
+    public static WebDriver getDriver() {
+        if (driverPool.get() == null) {
+            // WebDriver i thread bazında oluşturuyoruz.
+            switch (ConfigReader.getProperty("browser")) {
+                case "chrome":
+                    driverPool.set(new ChromeDriver());
                     break;
-                case "edge" :
-                    driver = new EdgeDriver();
+                case "edge":
+                    driverPool.set(new EdgeDriver());
                     break;
-                case "firefox" :
-                    driver = new FirefoxDriver();
+                case "safari":
+                    driverPool.set(new SafariDriver());
                     break;
-                case "safari" :
-                    driver = new SafariDriver();
+                case "firefox":
+                    driverPool.set(new FirefoxDriver());
                     break;
                 default:
-                    driver = new ChromeDriver();
+                    driverPool.set(new ChromeDriver());
             }
-            driver.manage().window().maximize();
-            driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(15));
+
+            // Oluşturulan WebDriveri yapılandırıyoruz.
+            driverPool.get().manage().window().maximize();
+            driverPool.get().manage().timeouts().implicitlyWait(Duration.ofSeconds(15));
         }
-        return driver;
+        // Thread'a özgü WebDriver objecti return ediyoruz.
+        return driverPool.get();
     }
 
-    public static void closeDriver(){
-        if(driver!=null){
-            driver.quit();
-            driver=null;
-        }
+    private Driver() {
+        // Singleton pattern
     }
 
-
-
-
+    public static void closeDriver() {
+        // Açık olan WebDriver örneğini kapatıyoruz.
+        if (driverPool.get() != null) {
+            driverPool.get().quit();
+            driverPool.remove(); // ThreadLocal'daki referansı temizliyoruz.
+        }
+    }
 }

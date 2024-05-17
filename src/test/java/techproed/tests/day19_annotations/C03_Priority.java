@@ -17,7 +17,7 @@ public class C03_Priority {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(15));
     }
 
-    @Test
+    @Test//(priority=0)
     public void youtubeTest() {
         driver.get("https://youtube.com");
     }

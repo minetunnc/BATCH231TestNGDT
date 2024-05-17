@@ -14,6 +14,9 @@ public class DataProviderPage {
     @FindBy (id = "age")
     public WebElement searchBox;
 
+    @FindBy (xpath = "//*[.='Yaş doğrulandı!']")
+    public WebElement positiveVerifyMessage;
+
 
 
 

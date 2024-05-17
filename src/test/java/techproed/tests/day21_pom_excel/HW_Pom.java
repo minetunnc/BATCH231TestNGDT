@@ -11,10 +11,13 @@ import techproed.utilities.ConfigReader;
 import techproed.utilities.Driver;
 import techproed.utilities.ReusableMethods;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class HW_Pom {
     ZeroPage zeroPage = new ZeroPage();
+
 
     @Test
     public void test01() {
@@ -39,21 +42,36 @@ public class HW_Pom {
         //7. "Purchase Foreign Currency" tusuna basin
         zeroPage.foreign.click();
         //8. "Currency" drop down menusunden Eurozone'u secin
-        ReusableMethods.ddmIndex(zeroPage.currency, 6);
+        Select select = new Select(zeroPage.currency);
+        select.selectByValue("EUR");
+
         //9. soft assert kullanarak "Eurozone (Euro)" secildigini test edin
 
-        SoftAssert softAssert = new SoftAssert();
-        softAssert.assertTrue(zeroPage.currency.getText().contains("Eurozone (Euro)"), "Eurozone secili değil!");
+    SoftAssert softAssert = new SoftAssert();
+    String selectedOptionText = select.getFirstSelectedOption().getText();
+            softAssert.assertEquals(selectedOptionText,"Eurozone (Euro)","Eurozone (Euro) secili degil!");
 
-        //10.soft assert kullanarak DropDown listesinin su secenekleri oldugunu testedin
-        // ("Select One", "Australia (dollar)", "Canada (dollar)","Switzerland
-        //(franc)","China (yuan)","Denmark (krone)","Eurozone (euro)","Great Britain
-        //(pound)","Hong Kong (dollar)","Japan (yen)","Mexico (peso)","Norway
-        //(krone)","New Zealand (dollar)","Sweden (krona)","Singapore
-        //(dollar)","Thailand (baht)")
-        Select select = new Select(zeroPage.currency);
-        List<WebElement> options =select.getAllSelectedOptions();
+    //10.soft assert kullanarak DropDown listesinin su secenekleri oldugunu testedin
+    // ("Select One", "Australia (dollar)", "Canada (dollar)","Switzerland
+    //(franc)","China (yuan)","Denmark (krone)","Eurozone (euro)","Great Britain
+    //(pound)","Hong Kong (dollar)","Japan (yen)","Mexico (peso)","Norway
+    //(krone)","New Zealand (dollar)","Sweden (krona)","Singapore
+    //(dollar)","Thailand (baht)")
+        List<String> expectedList = Arrays.asList("Select One", "Australia (dollar)", "Canada (dollar)","Switzerland (franc)",
+                "China (yuan)","Denmark (krone)","Eurozone (euro)","Great Britain (pound)",
+                "Hong Kong (dollar)","Japan (yen)","Mexico (peso)","Norway (krone)",
+                "New Zealand (dollar)","Sweden (krona)","Singapore (dollar)","Thailand (baht)");
+        List<String> allOptionsStringList = new ArrayList<>();
 
+       List<WebElement> allOptions = select.getOptions();
+       for (WebElement w : allOptions){
+           allOptionsStringList.add(w.getText());
+       }
+softAssert.assertEquals(allOptionsStringList, expectedList,"Liste esit degil!");
+       softAssert.assertAll();
 
-    }
+       Driver.closeDriver();
+
 }
+    }
+
