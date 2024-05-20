@@ -22,11 +22,11 @@ public class C04_Ignore {
     }
 
     @Test
-    @Ignore
+    @Ignore//anlık calısmalarda daha cok kullanılır
     public void youtubeTest() {
         driver.get("https://youtube.com");
     }
-    @Test(enabled = false)
+    @Test(enabled = false)//daha kalıcı devre dışı bırakmalarda kullanılır
     public void amazonTest() {
         driver.get("https://amazon.com");
     }
