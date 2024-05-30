@@ -7,17 +7,14 @@ import techproed.utilities.Driver;
 
 import java.util.List;
 
-public class dhtmlPage {
+public class PracticePage {
 
-    public dhtmlPage() {
+    public PracticePage() {
         PageFactory.initElements(Driver.getDriver(),this);
     }
 
-    @FindBy (xpath = "//div[@id='countries']//div")
-    public List<WebElement> countries;
-
-
-
+    @FindBy(xpath = "//h5")
+    public List<WebElement> products;
 
 
 
